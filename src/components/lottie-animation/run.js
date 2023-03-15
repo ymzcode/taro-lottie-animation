@@ -5,11 +5,34 @@
 *
 * */
 
-export function init({ domId: id, path }) {
-    const res = document.getElementById(id)
+import lottie from "lottie-web";
+
+class LottieAni {
+  constructor({domId: id, path, loop, autoplay}) {
+    this.id = id
+    this.path = path
+    this.loop = loop
+    this.autoplay = autoplay
+
+    // 初始化后生成的动画实例
+    this.ani = null
+    this.init()
+  }
+
+  init() {
+    const res = document.getElementById(this.id)
     console.log('其他端', res)
     return new Promise((resolve, reject) => {
-        const ani = null
-        resolve(ani)
+      // h5和小程序均返回
+      const ani = this.ani
+      // 由小程序返回
+      const canvas = null
+      // 由小程序返回
+      const context = null
+      resolve({ani})
     })
+  }
 }
+
+
+export default LottieAni

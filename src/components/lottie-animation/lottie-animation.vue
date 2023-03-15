@@ -6,7 +6,7 @@
 <script setup>
 import Taro, {useReady} from "@tarojs/taro";
 import {computed, onMounted, ref} from "vue";
-import {init} from "./run";
+import LottieAni from "./run";
 
 const props = defineProps({
   path: String,
@@ -24,10 +24,12 @@ const props = defineProps({
   },
   /*
   * 微信单独设置canvas宽
+  * 指定后，优先级比width高
   * */
   weWidth: Number,
   /*
   * 微信单独设置canvas高
+  * 指定后，优先级比height高
   * */
   weHeight: Number,
   loop: {
@@ -40,9 +42,15 @@ const props = defineProps({
   }
 })
 
-const lottieAnimation = ref(null)
+let lottieAnimation = null
+// 由小程序返回
+const weCanvas = ref(null)
+// 由小程序返回，结果是weCanvas.getContext('2d')
+const weContext = ref(null)
 
-
+/*
+* 按照设计图比例计算容器的大小
+* */
 const domStyle = computed(() => {
   const W = Taro.pxTransform(props.width)
   const H = Taro.pxTransform(props.height)
@@ -60,31 +68,49 @@ const isH5 = computed(() => {
 })
 
 onMounted(() => {
-  if (!props.domId || !props.path) {
+  if (!props.domId) {
     throw new Error('lottie-animation 缺少必要的参数')
   }
 })
 
 useReady(() => {
-  init(props).then(ani => {
-    lottieAnimation.value = ani
-    console.log('初始化完成')
-  })
+  initLottie()
 })
 
 const play = () => {
-  stop()
-  lottieAnimation.value.play()
+  lottieAnimation.play()
 }
 
 const stop = () => {
-  lottieAnimation.value.stop()
+  lottieAnimation.stop()
 }
 
-defineExpose({ play })
+const pause = () => {
+  lottieAnimation.pause()
+}
+
+const destroy = () => {
+  lottieAnimation && lottieAnimation.destroy()
+  // 销毁创建的类
+  lottieAnimation = null
+}
+
+const initLottie = () => {
+  if (lottieAnimation) {
+    console.warn('当前实例未销毁，请勿重复创建实例！')
+    return
+  }
+  lottieAnimation = new LottieAni(props)
+}
+
+const getLottieValue = () => {
+  return lottieAnimation.value
+}
+
+defineExpose({play, stop, pause, destroy, initLottie, getLottieValue})
 
 </script>
 
-<style scoped>
+<style>
 
 </style>
