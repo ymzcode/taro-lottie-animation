@@ -7,5 +7,7 @@ export default defineAppConfig({
     navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: 'WeChat',
     navigationBarTextStyle: 'black'
-  }
+  },
+  // lazyCodeLoading: 'requiredComponents',
+  // renderer: 'skyline'
 })

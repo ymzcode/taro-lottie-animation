@@ -1,19 +1,18 @@
 <template>
   <view class="index">
-    <text>{{ msg }}</text>
+    <text>演示lottie动画</text>
+    <lottie-animation class="lottie-1" loop autoplay dom-id="lottie1"
+                      path="https://assets9.lottiefiles.com/packages/lf20_Q7WY7CfUco.json"></lottie-animation>
   </view>
 </template>
 
-<script>
-import { ref } from 'vue'
-import './index.scss'
+<script setup>
+import {ref} from 'vue'
+import LottieAnimation from "../../components/lottie-animation/lottie-animation.vue";
 
-export default {
-  setup () {
-    const msg = ref('Hello world')
-    return {
-      msg
-    }
-  }
-}
+
 </script>
+
+
+<style lang="scss">
+</style>
