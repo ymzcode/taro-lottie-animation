@@ -95,11 +95,21 @@ class LottieAni {
     if (!this.ani) {
       throw new Error('未生成动画实例')
     }
-    this.ani.destroy()
-    this.ani = null
-    // 手动清除画布
+    /*
+   * 以下两种方法还是无法清除iPhone真机运行的画布
+   * 所以在组件中使用v-if来强制清除画布
+   *
+   * */
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    // // 手动清除画布
     this.canvas.width = 0
     this.canvas.height = 0
+
+    this.ani.destroy()
+    this.ani = null
+    console.log(this.context)
+    // this.context.reset()
+
   }
 
 }

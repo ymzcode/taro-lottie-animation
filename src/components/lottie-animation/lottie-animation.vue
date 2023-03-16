@@ -1,11 +1,11 @@
 <template>
   <div :style="domStyle" v-if="isH5" :id="props.domId"></div>
-  <canvas :style="domStyle" v-else :id="props.domId" type="2d"></canvas>
+  <canvas v-if="!isH5 && canvasShow" :style="domStyle" :id="props.domId" type="2d"></canvas>
 </template>
 
 <script setup>
 import Taro, {useReady} from "@tarojs/taro";
-import {computed, onMounted, ref} from "vue";
+import {computed, nextTick, onMounted, ref} from "vue";
 import LottieAni from "./run";
 
 const props = defineProps({
@@ -47,6 +47,8 @@ let lottieAnimation = null
 const weCanvas = ref(null)
 // 由小程序返回，结果是weCanvas.getContext('2d')
 const weContext = ref(null)
+//
+const canvasShow = ref(true)
 
 /*
 * 按照设计图比例计算容器的大小
@@ -93,6 +95,11 @@ const destroy = () => {
   lottieAnimation && lottieAnimation.destroy()
   // 销毁创建的类
   lottieAnimation = null
+  //
+  canvasShow.value = false
+  nextTick(() => {
+    canvasShow.value = true
+  })
 }
 
 const initLottie = () => {

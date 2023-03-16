@@ -32,6 +32,18 @@ class LottieAni {
       resolve({ani})
     })
   }
+
+  play() {
+  }
+
+  stop() {
+  }
+
+  pause() {
+  }
+
+  destroy() {
+  }
 }
 
 
