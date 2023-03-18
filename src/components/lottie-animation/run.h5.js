@@ -98,6 +98,13 @@ class LottieAni {
     this.ani = null
   }
 
+  /*
+  * 返回动画实例
+  * */
+  getAni() {
+    return this.ani
+  }
+
 }
 
 export default LottieAni

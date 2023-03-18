@@ -36,6 +36,25 @@
     </view>
 
 
+    <view>
+      <view class="title-text">事件监听</view>
+      <view class="desc-text">设置阻止默认初始化，监听complete/data_ready/destroy事件的执行，{{ '\n' }}
+        注册监听为自动注册, 删除组件上的@complete="complete"监听即取消
+      </view>
+      <view class="canvas-box">
+        <lottie-animation ref="lottie4" dom-id="lottie-4" stopDefaultInit @complete="complete"
+                          @data_ready="dataReady" @destroy="destroy"
+                          path="https://file.bingyishow.top/lottie/138008-accept.json"></lottie-animation>
+      </view>
+
+      <view class="option-btn-box">
+        <button @tap="lottie4.play()">播放</button>
+        <button @tap="lottie4.initLottie()">初始化</button>
+        <button @tap="lottie4.destroy()">销毁</button>
+      </view>
+    </view>
+
+
   </view>
 </template>
 
@@ -43,8 +62,31 @@
 import {ref} from 'vue'
 import LottieAnimation from "../../components/lottie-animation/lottie-animation.vue";
 import lottieFile1 from '../../static/lf20_7fy2yzzs.json'
+import Taro from "@tarojs/taro";
 
 const lottie1 = ref(null)
+const lottie4 = ref(null)
+
+const complete = () => {
+  Taro.showToast({
+    title: 'lottie4 播放完成',
+    icon: 'none'
+  })
+}
+
+const dataReady = () => {
+  Taro.showToast({
+    title: 'lottie4 初始化完成',
+    icon: 'none'
+  })
+}
+
+const destroy = () => {
+  Taro.showToast({
+    title: 'lottie4 销毁成功',
+    icon: 'none'
+  })
+}
 
 </script>
 
