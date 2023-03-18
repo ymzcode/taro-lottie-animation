@@ -1,8 +1,9 @@
 import lottie from 'lottie-miniprogram'
 import Taro from "@tarojs/taro";
+import * as path from "path";
 
 class LottieAni {
-  constructor({domId: id, path, weWidth, width, weHeight, height, loop, autoplay}) {
+  constructor({domId: id, path, weWidth, width, weHeight, height, loop, autoplay, request}) {
     this.id = id
     this.path = path
     this.loop = loop
@@ -11,6 +12,7 @@ class LottieAni {
     this.width = width
     this.weHeight = weHeight
     this.height = height
+    this.request = request
 
 
     // 初始化后生成的动画实例
@@ -18,6 +20,70 @@ class LottieAni {
     this.context = null
     this.canvas = null
     this.init()
+  }
+
+  /*
+  * 修复失帧的情况
+  *
+  * */
+  fixLostFPS() {
+    try {
+      const WIDTH = this.weWidth || this.width
+      const HEIGHT = this.weHeight || this.height
+      const dpr = Taro.getSystemInfoSync().pixelRatio
+      this.canvas.width = WIDTH * dpr
+      this.canvas.height = HEIGHT * dpr
+      this.context.scale(dpr, dpr)
+    } catch (err) {
+      throw new Error('fixLostFPS Error', err)
+    }
+  }
+
+  /*
+  * 请求文件
+  * */
+  async requestFile() {
+    if (!this.request || !this.path) {
+      throw new Error('requestFile 异常  参数不完整')
+    }
+    const res = await Taro.request({
+      url: this.path
+    }).catch(err => {
+      throw new Error('requestFile 请求失败', err)
+    })
+    const {statusCode} = res
+    if (statusCode === 200) {
+      return res.data
+    } else {
+      throw new Error('requestFile 请求状态异常', res)
+    }
+  }
+
+  /*
+  * 初始化lottie
+  * 生成动画对象
+  * */
+  initLottie(path, animationData) {
+    if (!path && !animationData) {
+      throw new Error('initLottie 参数异常')
+    }
+    try {
+      const params = {
+        rendererSettings: {
+          context: this.context,
+          // clearCanvas: true,
+          // progressiveLoad: true
+        },
+        renderer: 'canvas',
+        loop: this.loop,
+        autoplay: this.autoplay
+      }
+      path && (params.path = path)
+      animationData && (params.animationData = animationData)
+      this.ani = lottie.loadAnimation(params);
+    } catch (err) {
+      throw new Error('initLottie 执行出错')
+    }
   }
 
   init() {
@@ -28,40 +94,30 @@ class LottieAni {
       setTimeout(() => {
         const query = Taro.createSelectorQuery()
         query.select(`#${this.id}`).node(res => {
-          console.log(res)
           const canvas = res.node
           const context = canvas.getContext('2d')
-          console.log('weapp', res)
-
-          /*
-          *
-          * 修复微信失帧情况
-          * */
-          const WIDTH = this.weWidth || this.width
-          const HEIGHT = this.weHeight || this.height
-          const dpr = Taro.getSystemInfoSync().pixelRatio
-          canvas.width = WIDTH * dpr
-          canvas.height = HEIGHT * dpr
-          context.scale(dpr, dpr)
-
-          lottie.setup(canvas)
-          const ani = lottie.loadAnimation({
-            rendererSettings: {
-              context: context,
-              // clearCanvas: true,
-              // progressiveLoad: true
-            },
-            renderer: 'canvas',
-            loop: this.loop,
-            autoplay: this.autoplay,
-            path: this.path // the path to the animation json
-          });
-
-          this.ani = ani
           this.canvas = canvas
           this.context = context
 
-          resolve({ani, canvas, context})
+          console.log('weapp', res)
+
+          this.fixLostFPS()
+
+          lottie.setup(this.canvas)
+
+          /*
+          * 判断是否使用接口加载方式
+          * */
+          if (this.request) {
+            this.requestFile().then(animationData => {
+              this.initLottie(null, animationData)
+              resolve({ani: this.ani, canvas: this.canvas, context: this.context})
+            })
+          } else {
+            this.initLottie(this.path, null)
+            resolve({ani: this.ani, canvas: this.canvas, context: this.context})
+          }
+
         }).exec()
       }, 300)
     }).catch((err) => {

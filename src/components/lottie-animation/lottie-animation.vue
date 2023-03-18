@@ -39,6 +39,17 @@ const props = defineProps({
   autoplay: {
     type: Boolean,
     default: false
+  },
+  /*
+  * 仅在微信生效！！！！！！h5暂时不需要此功能
+  *
+  * 是否使用小程序的animationData加载, 原理是请求json文件，拿到数据本地加载
+  * 使用lottie的animationData加载动画
+  *
+  * */
+  request: {
+    type: Boolean,
+    default: false
   }
 })
 

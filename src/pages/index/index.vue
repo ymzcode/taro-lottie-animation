@@ -3,10 +3,10 @@
     <text class="tip-text">演示lottie动画</text>
     <view>
       <view class="title-text">基本使用</view>
-      <view class="desc-text">设置loop循环和autoplay自动播放</view>
+      <view class="desc-text">设置loop循环和autoplay自动播放，微信小程序使用path的加载方式</view>
       <view class="canvas-box">
         <lottie-animation ref="lottie1" class="lottie-1" loop autoplay dom-id="lottie-1"
-                          path="https://assets9.lottiefiles.com/packages/lf20_Q7WY7CfUco.json"></lottie-animation>
+                          path="https://file.bingyishow.top/lottie/lf20_Q7WY7CfUco.json"></lottie-animation>
       </view>
 
       <view class="option-btn-box">
@@ -16,7 +16,6 @@
         <button @tap="lottie1.destroy()">销毁</button>
         <button @tap="lottie1.initLottie()">重新生成</button>
       </view>
-
     </view>
 
 
