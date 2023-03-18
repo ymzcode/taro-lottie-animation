@@ -50,7 +50,8 @@ const props = defineProps({
   request: {
     type: Boolean,
     default: false
-  }
+  },
+  animationData: Object
 })
 
 let lottieAnimation = null

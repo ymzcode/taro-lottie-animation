@@ -1,9 +1,8 @@
 import lottie from 'lottie-miniprogram'
 import Taro from "@tarojs/taro";
-import * as path from "path";
 
 class LottieAni {
-  constructor({domId: id, path, weWidth, width, weHeight, height, loop, autoplay, request}) {
+  constructor({domId: id, path, weWidth, width, weHeight, height, loop, autoplay, request, animationData}) {
     this.id = id
     this.path = path
     this.loop = loop
@@ -13,6 +12,7 @@ class LottieAni {
     this.weHeight = weHeight
     this.height = height
     this.request = request
+    this.animationData = animationData
 
 
     // 初始化后生成的动画实例
@@ -105,10 +105,15 @@ class LottieAni {
 
           lottie.setup(this.canvas)
 
+
+
           /*
           * 判断是否使用接口加载方式
           * */
-          if (this.request) {
+          if (this.animationData) {
+            this.initLottie(null, this.animationData)
+            resolve({ani: this.ani, canvas: this.canvas, context: this.context})
+          } else if (this.request) {
             this.requestFile().then(animationData => {
               this.initLottie(null, animationData)
               resolve({ani: this.ani, canvas: this.canvas, context: this.context})
@@ -163,7 +168,6 @@ class LottieAni {
 
     this.ani.destroy()
     this.ani = null
-    console.log(this.context)
     // this.context.reset()
 
   }

@@ -3,9 +3,9 @@
     <text class="tip-text">演示lottie动画</text>
     <view>
       <view class="title-text">基本使用</view>
-      <view class="desc-text">设置loop循环和autoplay自动播放，微信小程序使用path的加载方式</view>
+      <view class="desc-text">设置loop循环和autoplay自动播放，微信小程序/h5使用path的加载方式</view>
       <view class="canvas-box">
-        <lottie-animation ref="lottie1" class="lottie-1" loop autoplay dom-id="lottie-1"
+        <lottie-animation ref="lottie1" loop autoplay dom-id="lottie-1"
                           path="https://file.bingyishow.top/lottie/lf20_Q7WY7CfUco.json"></lottie-animation>
       </view>
 
@@ -19,13 +19,30 @@
     </view>
 
 
+    <view>
+      <text class="desc-text">设置loop循环和autoplay自动播放{{ '\n' }}
+        1. 示例1使用path网络文件，但是微信小程序使用animationData的加载方式{{ '\n' }}
+        2. 示例2微信小程序/h5均使用animationData的加载方式
+      </text>
+      <view class="canvas-box flex">
+        <lottie-animation ref="lottie2" loop autoplay dom-id="lottie-2"
+                          path="https://file.bingyishow.top/lottie/celebrate.json"></lottie-animation>
+        <lottie-animation ref="lottie3" loop autoplay dom-id="lottie-3"
+                          :animation-data="lottieFile1"></lottie-animation>
+      </view>
+
+      <view class="option-btn-box">
+      </view>
+    </view>
+
+
   </view>
 </template>
 
 <script setup>
 import {ref} from 'vue'
 import LottieAnimation from "../../components/lottie-animation/lottie-animation.vue";
-
+import lottieFile1 from '../../static/lf20_7fy2yzzs.json'
 
 const lottie1 = ref(null)
 
@@ -37,40 +54,55 @@ const lottie1 = ref(null)
   display: flex;
   flex-direction: column;
   padding: 20px 40px;
+
   .tip-text {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
+
   .desc-text {
     color: #909399;
     font-size: 30px;
     margin-top: 10px;
+    word-break: break-all;
+    white-space: pre-wrap;
+
     &:before {
       content: '>>';
       font-size: 30px;
       margin-right: 20px;
     }
   }
+
   .title-text {
     font-size: 40px;
+
     &:before {
       content: '-';
       font-size: 50px;
       margin-right: 20px;
     }
   }
+
   .canvas-box {
     border: 1px solid #909399;
     margin-top: 20px;
   }
+
+  .flex {
+    display: flex;
+  }
+
   .option-btn-box {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 30px;
+    font-size: 30px;
+
     button {
       width: auto;
       display: inline-block;
