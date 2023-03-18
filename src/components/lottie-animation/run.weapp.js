@@ -2,24 +2,23 @@ import lottie from 'lottie-miniprogram'
 import Taro from "@tarojs/taro";
 
 class LottieAni {
-  constructor({domId: id, path, weWidth, width, weHeight, height, loop, autoplay, request, animationData}) {
-    this.id = id
-    this.path = path
-    this.loop = loop
-    this.autoplay = autoplay
-    this.weWidth = weWidth
-    this.width = width
-    this.weHeight = weHeight
-    this.height = height
-    this.request = request
-    this.animationData = animationData
+  constructor() {
+    this.id = null
+    this.path = null
+    this.loop = null
+    this.autoplay = null
+    this.weWidth = null
+    this.width = null
+    this.weHeight = null
+    this.height = null
+    this.request = null
+    this.animationData = null
 
 
     // 初始化后生成的动画实例
     this.ani = null
     this.context = null
     this.canvas = null
-    this.init()
   }
 
   /*
@@ -86,8 +85,31 @@ class LottieAni {
     }
   }
 
-  init() {
+
+  /*
+  * 初始化参数
+  * */
+  initOptions({domId: id, path, weWidth, width, weHeight, height, loop, autoplay, request, animationData}) {
+    this.id = id
+    this.path = path
+    this.loop = loop
+    this.autoplay = autoplay
+    this.weWidth = weWidth
+    this.width = width
+    this.weHeight = weHeight
+    this.height = height
+    this.request = request
+    this.animationData = animationData
+  }
+
+  init(options) {
     return new Promise((resolve, reject) => {
+      if (!options) {
+        throw new Error('init初始化参数异常', options)
+      }
+
+      this.initOptions(options)
+
       /*
       * 微信小程序需要延迟获取
       * */
@@ -99,12 +121,11 @@ class LottieAni {
           this.canvas = canvas
           this.context = context
 
-          console.log('weapp', res)
+          // console.log('weapp', res)
 
           this.fixLostFPS()
 
           lottie.setup(this.canvas)
-
 
 
           /*

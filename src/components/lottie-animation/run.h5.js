@@ -1,17 +1,16 @@
 import lottie from 'lottie-web'
 
 class LottieAni {
-  constructor({domId: id, path, loop, autoplay, animationData}) {
-    this.id = id
-    this.path = path
-    this.loop = loop
-    this.autoplay = autoplay
+  constructor() {
+    this.id = null
+    this.path = null
+    this.loop = null
+    this.autoplay = null
     this.dom = null
-    this.animationData = animationData
+    this.animationData = null
 
     // 初始化后生成的动画实例
     this.ani = null
-    this.init()
   }
 
   /*
@@ -37,17 +36,34 @@ class LottieAni {
     }
   }
 
-  init() {
+
+  /*
+  * 初始化参数
+  * */
+  initOptions({domId: id, path, loop, autoplay, animationData}) {
+    this.id = id
+    this.path = path
+    this.loop = loop
+    this.autoplay = autoplay
+    this.animationData = animationData
+  }
+
+  init(options) {
     return new Promise((resolve, reject) => {
+      if (!options) {
+        throw new Error('init初始化参数异常', options)
+      }
+      this.initOptions(options)
       this.dom = document.getElementById(this.id)
-      console.log('h5', this.dom)
+      // console.log('h5', this.dom)
 
       if (this.animationData) {
         this.initLottie(null, this.animationData)
+        resolve({ani: this.ani})
       } else {
         this.initLottie(this.path)
+        resolve({ani: this.ani})
       }
-      resolve({ani: this.ani})
     }).catch((err) => {
       throw new Error(err)
     })

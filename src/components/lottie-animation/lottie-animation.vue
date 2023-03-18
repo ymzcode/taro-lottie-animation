@@ -119,11 +119,17 @@ const initLottie = () => {
     console.warn('当前实例未销毁，请勿重复创建实例！')
     return
   }
-  lottieAnimation = new LottieAni(props)
+  lottieAnimation = new LottieAni()
+  lottieAnimation.init(props).then(res => {
+    /*
+    * 这里可以获取动画实例ani等参数
+    * */
+    console.log(res)
+  })
 }
 
 const getLottieValue = () => {
-  return lottieAnimation.value
+  return lottieAnimation
 }
 
 defineExpose({play, stop, pause, destroy, initLottie, getLottieValue})
