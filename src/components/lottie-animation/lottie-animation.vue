@@ -115,6 +115,10 @@ const pause = () => {
   lottieAnimation.pause()
 }
 
+const goToAndStop = (value, isFrame) => {
+  lottieAnimation.getAni()?.goToAndStop(value, isFrame)
+}
+
 const destroy = () => {
   lottieAnimation && lottieAnimation.destroy()
   // 销毁创建的类
@@ -206,7 +210,7 @@ const getLottieValue = () => {
   return lottieAnimation
 }
 
-defineExpose({play, stop, pause, destroy, initLottie, getLottieValue})
+defineExpose({play, stop, pause, destroy, initLottie, getLottieValue, goToAndStop})
 
 </script>
 

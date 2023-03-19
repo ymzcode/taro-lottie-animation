@@ -72,6 +72,7 @@ const complete = () => {
     title: 'lottie4 播放完成',
     icon: 'none'
   })
+  lottie4.value.goToAndStop(0, true)
 }
 
 const dataReady = () => {
