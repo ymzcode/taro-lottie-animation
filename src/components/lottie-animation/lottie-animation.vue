@@ -152,6 +152,7 @@ const initListener = (ani) => {
   attrs['onLoopComplete'] && ani.addEventListener('loopComplete', listenerClass.loopComplete)
   attrs['onDestroy'] && ani.addEventListener('destroy', listenerClass.destroy)
   attrs['onSegmentStart'] && ani.addEventListener('segmentStart', listenerClass.segmentStart)
+  attrs['onEnterFrame'] && ani.addEventListener('enterFrame', listenerClass.enterFrame)
 }
 
 const listenerClass = {
@@ -189,6 +190,15 @@ const listenerClass = {
   segmentStart: function () {
     console.log('segmentStart 开始播放')
     attrs['onSegmentStart']()
+  },
+  /*
+  * 每一帧触发一次
+  * 初始化完成后默认触发一次
+  *
+  * */
+  enterFrame: function (data) {
+    console.log('enterFrame 播放', data)
+    attrs['onEnterFrame'](data)
   }
 }
 

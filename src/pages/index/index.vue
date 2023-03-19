@@ -43,7 +43,7 @@
       </view>
       <view class="canvas-box">
         <lottie-animation ref="lottie4" dom-id="lottie-4" stopDefaultInit @complete="complete"
-                          @data_ready="dataReady" @destroy="destroy"
+                          @data_ready="dataReady" @destroy="destroy" @enterFrame="enterFrame"
                           path="https://file.bingyishow.top/lottie/138008-accept.json"></lottie-animation>
       </view>
 
@@ -84,6 +84,13 @@ const dataReady = () => {
 const destroy = () => {
   Taro.showToast({
     title: 'lottie4 销毁成功',
+    icon: 'none'
+  })
+}
+
+const enterFrame = (data) => {
+  Taro.showToast({
+    title: `lottie4 播放帧数${data.currentTime}`,
     icon: 'none'
   })
 }
